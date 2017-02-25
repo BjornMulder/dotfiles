@@ -1,5 +1,4 @@
 " basic config"{{{
-" keep indentation on return
     """ disable all deamon keys"{{{
     "disable arrows
     noremap <Up> <NOP>
@@ -15,32 +14,35 @@
     " switch ; and :
     nnoremap ; :
     nnoremap : ;"}}}
+
 "map leader to space
 let mapleader = "\<space>"
+
+" map local leader to comma
 let maplocalleader = ","
 
       let $PATH=$PATH . ':' . expand('~/.composer/vendor/bin')
       let g:padawan#composer_command = 'php /usr/bin/composer'
-"getting python to behave
-let g:python_host_prog = '/usr/bin/python2.7'
-let g:python3_host_prog = '/usr/bin/python3'
 
 "adding some stuff to the wildignore
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/vendor/*,*/\.git/*,*/kohana_system/*,*/kohana_modules/*
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/vendor/*,*/\.git/*,*/kohana_system/*
 
+" set filetype to html + php for php files
 autocmd BufRead,BufNewFile *.php setlocal filetype=php.html
+autocmd BufRead,BufNewFile *.ctp setlocal filetype=php.html
 
+" disable folding for markdown
 autocmd Filetype markdown setlocal nofoldenable
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
-
 " auto source nvimrc
 autocmd! bufwritepost .nvimrc source %
 
-" change cwd depending on file
-set autochdir
+" make vim save more
+set hidden
+set history=100
 
 " make backspace behave as it should
 set backspace=indent,eol,start
@@ -62,6 +64,7 @@ set splitbelow
 
 " enable line numbering
 set number
+set relativenumber
 
 " disable backupfiles
 set nobackup
@@ -138,6 +141,7 @@ set mouse=a
 set lazyredraw
 
 
+
     " FoldText"{{{
     function! MyFoldText()
         let line = getline(v:foldstart)
@@ -159,83 +163,106 @@ set lazyredraw
 " including all plugins"{{{
 call plug#begin('~/.vim/plugged')
 "plugin calls
-    """ easy comments with gcc"{{{
-    Plug 'tpope/vim-commentary'"}}}
-    """ well... emmet"{{{
-    Plug 'mattn/emmet-vim'"}}}
-    """ syntax checker"{{{
-    Plug 'scrooloose/syntastic'"}}}
-    """ brackets & tags"{{{
-    " auto {}[]''() etc
-    Plug 'jiangmiao/auto-pairs'
-    " change surrounding tag and braces
-    Plug 'tpope/vim-surround'"}}}
-    """ file utilities"{{{
-    " I MEAN NERDTREE!
-    Plug 'scrooloose/nerdtree'
-    " bar to visualise ctags
-    Plug 'majutsushi/tagbar'
-    "}}}
-    """ making things look pretty"{{{
-    " auto size splits
-    Plug 'zhaocai/GoldenView.vim'
-    " colors!
-    Plug 'jacoborus/tender.vim'
-    Plug 'flazz/vim-colorschemes'
-    Plug 'sickill/vim-monokai'
-    """ airline"{{{
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'"}}}"}}}
-    """ git"{{{
-    " git utilities
-    Plug 'jreybert/vimagit'
-    " git markings in file
-    Plug 'tpope/vim-fugitive'
-    " git markings in the gutter
-    Plug 'airblade/vim-gitgutter'
-    "}}}
-    """ filetype plugins"{{{
-    """ html"{{{
-    Plug 'othree/html5.vim'
-    " autocomp <html></html> tags
-    Plug 'tmhedberg/matchit'
-    " close html tags
-    Plug 'alvan/vim-closetag'"}}}
-    """ sass"{{{
-    Plug 'cakebaker/scss-syntax.vim'"}}}
-    """ javascript"{{{
-    Plug 'jelera/vim-javascript-syntax'
-    Plug 'pangloss/vim-javascript'
-    Plug 'isRuslan/vim-es6'
-    " better js
-    Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
-    Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+""" calculus "{{{
+Plug 'arecarn/vim-crunch'
+"}}}
+""" easy comments with gcc"{{{
+Plug 'tpope/vim-commentary'"}}}
+""" well... emmet"{{{
+Plug 'mattn/emmet-vim'"}}}
+""" syntax checker"{{{
+Plug 'scrooloose/syntastic'"}}}
+""" brackets & tags"{{{
+" auto {}[]''() etc
+Plug 'jiangmiao/auto-pairs'
+" change surrounding tag and braces
+Plug 'tpope/vim-surround'"}}}
+""" file utilities"{{{
+" I MEAN NERDTREE!
+Plug 'scrooloose/nerdtree'
+" bar to visualise ctags
+Plug 'majutsushi/tagbar'
+"}}}
+""" making things look pretty"{{{
+" auto size splits
+Plug 'zhaocai/GoldenView.vim'
+" colors!
+Plug 'jacoborus/tender.vim'
+Plug 'flazz/vim-colorschemes'
+Plug 'sickill/vim-monokai'
+""" airline"{{{
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'"}}}"}}}
+""" git"{{{
+" git utilities
+Plug 'jreybert/vimagit'
+" git markings in file
+Plug 'tpope/vim-fugitive'
+" git markings in the gutter
+"}}}
+""" filetype plugins"{{{
+""" html"{{{
+Plug 'othree/html5.vim'
+" autocomp <html></html> tags
+Plug 'tmhedberg/matchit'
+" close html tags
+Plug 'alvan/vim-closetag'"}}}
+""" sass"{{{
+Plug 'cakebaker/scss-syntax.vim'"}}}
+""" javascript"{{{
+Plug 'jelera/vim-javascript-syntax'
+Plug 'pangloss/vim-javascript'
+Plug 'isRuslan/vim-es6'
+" better js
+Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+" Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 
-    "}}}
-    "}}}
-    """ autocompletion "{{{
-    Plug 'SirVer/ultisnips'
-    Plug 'honza/vim-snippets'
-    Plug 'Shougo/deoplete.nvim'    "}}}
-    """ markdown"{{{
-    Plug 'godlygeek/tabular'
-    Plug 'plasticboy/vim-markdown'
-    Plug 'suan/vim-instant-markdown'
-    Plug 'JamshedVesuna/vim-markdown-preview'"}}}
-    """ VimWiki"{{{
-       Plug 'vimwiki/vimwiki'"}}}
-    """ command-T"{{{
-    Plug 'ctrlpvim/ctrlp.vim'
-    "}}}
-    """ Beautifull indentation "{{{
-      Plug 'Yggdroot/indentLine'
 "}}}
-    """ phpcomplete "{{{
-      Plug 'Shougo/vimproc'
-      Plug 'Shougo/unite.vim'
-      Plug 'm2mdas/phpcomplete-extended'
-      Plug 'mkusher/padawan.vim'
 "}}}
+""" autocompletion "{{{
+Plug 'ervandew/supertab'
+" Plug 'Shougo/neosnippet'
+" Plug 'Shougo/neosnippet-snippets'
+Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'Shougo/deoplete.nvim'    "}}}
+""" markdown"{{{
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'suan/vim-instant-markdown'
+Plug 'JamshedVesuna/vim-markdown-preview'"}}}
+""" VimWiki"{{{
+Plug 'vimwiki/vimwiki'"}}}
+""" command-T"{{{
+Plug 'ctrlpvim/ctrlp.vim'
+"}}}
+""" Beautifull indentation "{{{
+Plug 'Yggdroot/indentLine'
+"}}}
+""" phpcomplete "{{{
+Plug 'Shougo/vimproc'
+Plug 'shawncplus/phpcomplete.vim'
+"}}}
+""" jinja "{{{
+Plug 'lepture/vim-jinja'"}}}
+""" mysql "{{{
+Plug 'vim-scripts/SQLComplete.vim'
+"}}}
+""" Vdebug "{{{
+Plug 'joonty/vdebug'
+"}}}
+""" mysql "{{{
+Plug 'NLKNguyen/pipe.vim'  " dependency
+Plug 'NLKNguyen/pipe-mysql.vim'
+"}}}
+"
+"
+" Track the engine.
+Plug 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets'
+
 " All of your Plugins must be added before the following line
 call plug#end()
 
@@ -245,36 +272,13 @@ filetype plugin indent on    " required
     "gitgutter config"{{{
     set updatetime=250
     let g:gitgutter_realtime = 1"}}}
-    " Deoplete"{{{
-		" Use deoplete.
-		let g:deoplete#enable_at_startup = 1
-
-
-    " deoplete tab-complete
-    inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-
-    " Use deoplete.
-    let g:tern_request_timeout = 1
-    let g:tern_show_signature_in_pum = '0'  " This do disable full signature type on autocomplete
-
-    "Add extra filetypes
-    let g:tern#filetypes = [
-                    \ 'jsx',
-                    \ 'javascript.jsx',
-                    \ 'vue',
-                    \ '...'
-                    \ ]
-    let g:tern#command = ["tern"]
-    let g:tern#arguments = ["--persistent"]
-
-    "}}}
     " ctrlP "{{{
     " let g:ctrlp_map = '<c-p>'
     " let g:ctrlp_cmd = 'CtrlP'
 
     let g:ctrlp_working_path_mode = 'ra'
 
-    set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/kohana_system/*,*/kohana_modules/*,*/panoview/*,*/huiswerk/*,*/node_modules/*     " MacOSX/Linux
+    set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/kohana_system/*,*/panoview/*,*/huiswerk/*,*/node_modules/*     " MacOSX/Linux
     set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 
     let g:ctrlp_follow_symlinks=0
@@ -316,18 +320,59 @@ filetype plugin indent on    " required
     " indentline "{{{
       let g:indentLine_char = '┊'
 "}}}
-    " phpcomplete
-     " Settings are read when phpcomplete#CompletePHP is called
-     let g:phpcomplete_parse_docblock_comments = 1
+    " superTab "{{{
+        " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+        let g:UltiSnipsExpandTrigger="<tab>"
+        let g:UltiSnipsJumpForwardTrigger="<c-b>"
+        let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+        " If you want :UltiSnipsEdit to split your window.
+        let g:UltiSnipsEditSplit="vertical"
+    "
+    " "}}}
+    " deoplete"{{{
+     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+     smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+     xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+     Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
      let g:deoplete#enable_at_startup = 1
-     let g:deoplete#file#enable_buffer_path = 1
-     let g:deoplete#omni#functions = { 'php': 'phpcomplete#CompletePHP'  }
-     autocmd  FileType  php setlocal omnifunc=phpcomplete_extended#CompletePHP
-    "}}}
+     if !exists('g:deoplete#omni#input_patterns')
+       let g:deoplete#omni#input_patterns = {}
+     endif
+     " let g:deoplete#disable_auto_complete = 1
+     autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+     " omnifuncs
+     augroup omnifuncs
+       autocmd!
+       autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+       autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+       autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+       autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+       autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+       autocmd  FileType  php setlocal omnifunc=phpcomplete_extended#CompletePHP
+
+     augroup end
+     " tern
+     if exists('g:plugs["tern_for_vim"]')
+       let g:tern_show_argument_hints = 'on_hold'
+       let g:tern_show_signature_in_pum = 1
+       autocmd FileType javascript setlocal omnifunc=tern#Complete
+     endif
+     let g:deoplete#omni_patterns = {}
+     let g:deoplete#omni_patterns.php = '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+     " tern
+     autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
+     let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+    ""}}}
+
+"}}}
 " styling"{{{
 syntax enable
 set background=dark
 colorscheme tender
+
 " hybrid
 
 " Set split separator to Unicode box drawing character
@@ -349,13 +394,6 @@ nnoremap <leader>k <C-W><C-K>
 nnoremap <leader>l <C-W><C-L>
 nnoremap <leader>h <C-W><C-H>
 
-" copy & pasting from system clipboard
-vmap <Leader>y "+y
-vmap <Leader>d "+d
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
 
 " Nerdtree shortcut
 nnoremap <leader>tt :NERDTreeToggle<CR>
@@ -392,6 +430,9 @@ nnoremap <leader>g :Magit<CR>
 
 " Emmet shortcut
 nnoremap <leader>e <C-Y>,
+
+" Open current file in Sublime
+nnoremap <leader>so :!sublime %<CR>
 
 
 
@@ -434,8 +475,6 @@ nnoremap ^ <nop>
 " Clean trailing whitespace
 nnoremap <leader>cw mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
-" Use tab to jump between brackets, quotes and html tags
-map <tab> %
 
 " Move lines up and down
 nnoremap <C-k> :m .-2<CR>==
@@ -547,3 +586,10 @@ hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
 " }}}
 
 " }}}
+" Persistent Undo "{{{
+    try
+      set undodir=~/.vim_runtime/temp_dirs/undodir
+      set undofile
+    catch
+    endtry
+"}}}
