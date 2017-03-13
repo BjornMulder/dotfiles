@@ -44,6 +44,9 @@ autocmd! bufwritepost .nvimrc source %
 set hidden
 set history=100
 
+" show whitespace
+set list
+set listchars=tab:>-,trail:~,extends:>,precedes:<
 " make backspace behave as it should
 set backspace=indent,eol,start
 
@@ -126,8 +129,6 @@ set ttimeoutlen=50
 set complete-=.,w,b,y,t
 set completeopt=longest,menuone,preview
 
-" set listchars
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 
 set wrap
 
@@ -305,7 +306,7 @@ filetype plugin indent on    " required
     let g:airline#extensions#tabline#left_sep = ' '
     let g:airline#extensions#tabline#left_alt_sep = '|'
     "molokai
-    let g:airline_theme='molokai'
+    let g:airline_theme='solarized'
     "}}}
     " handlebars files highlighting"{{{
     au BufReadPost *.hbs set syntax=html
@@ -371,8 +372,8 @@ filetype plugin indent on    " required
 " styling"{{{
 syntax enable
 set background=dark
-colorscheme tender
-
+colorscheme solarized
+" tender
 " hybrid
 
 " Set split separator to Unicode box drawing character
@@ -434,8 +435,8 @@ nnoremap <leader>e <C-Y>,
 " Open current file in Sublime
 nnoremap <leader>so :!sublime %<CR>
 
-
-
+"convert whole file to tabs
+nnoremap <leader>ctt :set ts=2 <CR> :set et <CR> :%retab! <CR>
 
 "}}}
 " remapping"{{{
