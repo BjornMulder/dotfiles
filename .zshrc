@@ -2,7 +2,7 @@
 export ZSH=~/.oh-my-zsh
 
 
-ZSH_THEME="af-magic"
+ZSH_THEME="agnoster"
 #af-magic
 # crunch
 # brad-muse
@@ -25,8 +25,6 @@ export PATH="$PATH:$HOME/.composer/vendor/bin:$HOME"
 export MANPATH="/usr/local/man:$MANPATH"
 export EDITOR='nvim'
 export ANDROID_HOME="/home/bjorn/Android/Sdk"
-#export VIMRUNTIME=/usr/local/share/nvim/runtime
-#export VIM=/user/local/share/nvim
 source $ZSH/oh-my-zsh.sh
 
 
@@ -41,22 +39,17 @@ alias c="clear"
 alias zrel=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 alias hosts="sudo $EDITOR /etc/hosts"
-alias g="git"
 alias gs="git status"
 alias gcm="git commit -m \" "
 alias ip="curl ipinfo.io/ip"
+
+alias g="z"
 
 # tmux
 alias t="tmux"
 alias tls="tmux ls"
 alias tk="tmux kill-session -t"
 alias ta="tmux attach-session -t"
-
-# apt aliases
-# alias sagu="sudo apt-get update"
-# alias sagre="sudo apt-get remove"
-# alias sagur="sudo apt-get upgrade"
-# alias sagi="sudo apt-get install"
 
 #vim
 alias vim"sudo nvim"
@@ -66,16 +59,14 @@ alias v="sudo nvim"
 # fixing ctags
 alias ctags="`brew --prefix`/bin/ctags"
 
-# creating new vhosts
-alias create-vhost="sudo ~/bin/create-vhost"
-
 # mount pi smb share
-alias mountdev="mount -t smbfs //raket@31.149.12.110/devshare ~/code/raket/pimnt"
+alias mountdev="mount -t smbfs //raket@31.149.12.110/devshare ~/code/raket/devserver"
 alias composer="php /usr/local/bin/composer.phar"
 
 # python
 alias p="python"
 alias p3="python3"
+
 ### linux stuff# {{{
 # alias mntftp="python ~/.scripts/gcurlftpfs.py"
 
@@ -94,7 +85,14 @@ alias p3="python3"
 # alias ctags="ctags -R --fields=+aimlS --languages=php"
 
 # # fucking sound issues
-# alias fixmyfuckingsound="amixer -D pulse set Master 1+ toggle"# }}}
+# alias fixmyfuckingsound="amixer -D pulse set Master 1+ toggle"# 
+#
+# apt aliases
+# alias sagu="sudo apt-get update"
+# alias sagre="sudo apt-get remove"
+# alias sagur="sudo apt-get upgrade"
+# alias sagi="sudo apt-get install"
+# }}}
 
 
 #----------------------------------------------------------------
