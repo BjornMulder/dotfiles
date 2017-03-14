@@ -140,9 +140,6 @@ set mouse=a
 
 " Don't update the display while executing macros
 set lazyredraw
-
-
-
     " FoldText"{{{
     function! MyFoldText()
         let line = getline(v:foldstart)
@@ -480,6 +477,15 @@ nnoremap <leader>cw mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 " Move lines up and down
 nnoremap <C-k> :m .-2<CR>==
 nnoremap <C-j> :m .+1<CR>==
+
+" Window Resizing {{{
+" right/up : bigger
+" left/down : smaller
+nnoremap <m-right> :vertical resize +3<cr>
+nnoremap <m-left> :vertical resize -3<cr>
+nnoremap <m-up> :resize +3<cr>
+nnoremap <m-down> :resize -3<cr>
+" }}}
 "}}}
 " change cursor depending on mode"{{{
 " Use a blinking upright bar cursor in Insert mode, a blinking block in normal
@@ -593,4 +599,33 @@ hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
       set undofile
     catch
     endtry
+"}}}
+" mini plugins "{{{
+" Copying/pasting text to the system clipboard."{{{
+"
+" For some reason Vim no longer wants to talk to the OS X pasteboard rough "*.
+" Computers are bullshit.
+function! g:FuckingCopyTheTextPlease()
+    let view = winsaveview()
+    let old_z = @z
+    normal! gv"zy
+    call system('pbcopy', @z)
+    let @z = old_z
+    call winrestview(view)
+endfunction
+
+function! g:FuckingCopyAllTheTextPlease()
+    let view = winsaveview()
+    let old_z = @z
+    normal! ggVG"zy
+    call system('pbcopy', @z)
+    let @z = old_z
+    call winrestview(view)
+endfunction
+
+noremap <leader>p "*p
+" noremap <leader>p mz:r!pbpaste<cr>`z
+vnoremap <leader>y :<c-u>call g:FuckingCopyTheTextPlease()<cr>
+nnoremap <leader>y VV:<c-u>call g:FuckingCopyTheTextPlease()<cr>
+nnoremap <leader>Y :<c-u>call g:FuckingCopyAllTheTextPlease()<cr>"}}}
 "}}}
