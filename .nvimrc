@@ -219,8 +219,6 @@ Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
 "}}}
 """ autocompletion "{{{
 Plug 'ervandew/supertab'
-" Plug 'Shougo/neosnippet'
-" Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/deoplete.nvim'    "}}}
