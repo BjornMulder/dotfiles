@@ -52,9 +52,9 @@ alias tk="tmux kill-session -t"
 alias ta="tmux attach-session -t"
 
 #vim
-alias vim"sudo nvim"
-alias vi="sudo nvim"
-alias v="sudo nvim"
+alias vim"nvim"
+alias vi="nvim"
+alias v="nvim"
 
 # fixing ctags
 alias ctags="`brew --prefix`/bin/ctags"
