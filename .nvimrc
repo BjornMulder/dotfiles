@@ -1,3 +1,18 @@
+" _______                                              __       __            __        __                     __               __    __  __     __  ______  __       __  _______    ______
+"/       \                                            /  \     /  |          /  |      /  |                   /  |             /  \  /  |/  |   /  |/      |/  \     /  |/       \  /      \
+"$$$$$$$  |    __   ______    ______   _______        $$  \   /$$ | __    __ $$ |  ____$$ |  ______    ______ $$/_______       $$  \ $$ |$$ |   $$ |$$$$$$/ $$  \   /$$ |$$$$$$$  |/$$$$$$  |
+"$$ |__$$ |   /  | /      \  /      \ /       \       $$$  \ /$$$ |/  |  /  |$$ | /    $$ | /      \  /      \$//       |      $$$  \$$ |$$ |   $$ |  $$ |  $$$  \ /$$$ |$$ |__$$ |$$ |  $$/
+"$$    $$<    $$/ /$$$$$$  |/$$$$$$  |$$$$$$$  |      $$$$  /$$$$ |$$ |  $$ |$$ |/$$$$$$$ |/$$$$$$  |/$$$$$$  |/$$$$$$$/       $$$$  $$ |$$  \ /$$/   $$ |  $$$$  /$$$$ |$$    $$< $$ |
+"$$$$$$$  |   /  |$$ |  $$ |$$ |  $$/ $$ |  $$ |      $$ $$ $$/$$ |$$ |  $$ |$$ |$$ |  $$ |$$    $$ |$$ |  $$/ $$      \       $$ $$ $$ | $$  /$$/    $$ |  $$ $$ $$/$$ |$$$$$$$  |$$ |   __
+"$$ |__$$ |   $$ |$$ \__$$ |$$ |      $$ |  $$ |      $$ |$$$/ $$ |$$ \__$$ |$$ |$$ \__$$ |$$$$$$$$/ $$ |       $$$$$$  |      $$ |$$$$ |  $$ $$/    _$$ |_ $$ |$$$/ $$ |$$ |  $$ |$$ \__/  |
+"$$    $$/    $$ |$$    $$/ $$ |      $$ |  $$ |      $$ | $/  $$ |$$    $$/ $$ |$$    $$ |$$       |$$ |      /     $$/       $$ | $$$ |   $$$/    / $$   |$$ | $/  $$ |$$ |  $$ |$$    $$/
+"$$$$$$$/__   $$ | $$$$$$/  $$/       $$/   $$/       $$/      $$/  $$$$$$/  $$/  $$$$$$$/  $$$$$$$/ $$/       $$$$$$$/        $$/   $$/     $/     $$$$$$/ $$/      $$/ $$/   $$/  $$$$$$/
+"       /  \__$$ |
+"       $$    $$/
+"        $$$$$$/
+" Author: Bjorn Mulder
+" Repo: https://github.com/bjornmulder/dotfiles
+
 " basic config"{{{
     """ disable all deamon keys"{{{
     "disable arrows
@@ -11,10 +26,11 @@
     inoremap <up> <NOP>
     inoremap <down> <NOP>
 
-    " switch ; and :
-    nnoremap ; :
-    nnoremap : ;"}}}
+    "}}}
 
+" switch ; and :
+nnoremap ; :
+nnoremap : ;
 "map leader to space
 let mapleader = "\<space>"
 
@@ -30,6 +46,7 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/vendor/*,*/\.git/*,*/kohana_system/*
 " set filetype to html + php for php files
 autocmd BufRead,BufNewFile *.php setlocal filetype=php.html
 autocmd BufRead,BufNewFile *.ctp setlocal filetype=php.html
+autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
 
 " disable folding for markdown
 autocmd Filetype markdown setlocal nofoldenable
@@ -40,6 +57,8 @@ endif
 " auto source nvimrc
 autocmd! bufwritepost .nvimrc source %
 
+" use system clipboard
+set clipboard=unnamed
 " make vim save more
 set hidden
 set history=100
@@ -161,9 +180,6 @@ set lazyredraw
 " including all plugins"{{{
 call plug#begin('~/.vim/plugged')
 "plugin calls
-""" calculus "{{{
-Plug 'arecarn/vim-crunch'
-"}}}
 """ easy comments with gcc"{{{
 Plug 'tpope/vim-commentary'"}}}
 """ well... emmet"{{{
@@ -197,6 +213,7 @@ Plug 'jreybert/vimagit'
 " git markings in file
 Plug 'tpope/vim-fugitive'
 " git markings in the gutter
+Plug 'airblade/vim-gitgutter'
 "}}}
 """ filetype plugins"{{{
 """ html"{{{
@@ -251,20 +268,28 @@ Plug 'joonty/vdebug'
 Plug 'NLKNguyen/pipe.vim'  " dependency
 Plug 'NLKNguyen/pipe-mysql.vim'
 "}}}
-"
-"
+""" easymotion "{{{
+Plug 'easymotion/vim-easymotion'
+"}}}
+""" ultisnips"{{{
 " Track the engine.
 Plug 'SirVer/ultisnips'
-
 " Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
-
+"}}}
+""" TypeScript"{{{
+Plug 'leafgarland/typescript-vim'
+Plug 'Quramy/tsuquyomi'
+"}}}
+""" Ionic"{{{
+Plug 'akz92/vim-ionic2'
+"}}}
 " All of your Plugins must be added before the following line
 call plug#end()
 
 filetype plugin indent on    " required
 "}}}
-" plugin config"{{{
+" Plugin Config"{{{
     "gitgutter config"{{{
     set updatetime=250
     let g:gitgutter_realtime = 1"}}}
@@ -276,6 +301,8 @@ filetype plugin indent on    " required
 
     set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/kohana_system/*,*/panoview/*,*/huiswerk/*,*/node_modules/*     " MacOSX/Linux
     set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+    set wildignore+=*.pyc
+    let NERDTreeIgnore = ['\.pyc$']
 
     let g:ctrlp_follow_symlinks=0
     let g:ctrlp_clear_cache_on_exit=0
@@ -330,6 +357,7 @@ filetype plugin indent on    " required
      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
      xmap <C-k>     <Plug>(neosnippet_expand_target)
+     let g:neosnippet#snippets_directory='~/dotfiles/snippets/vim'
 
      Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
      let g:deoplete#enable_at_startup = 1
@@ -362,7 +390,6 @@ filetype plugin indent on    " required
      autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
      let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
     ""}}}
-
 "}}}
 " styling"{{{
 syntax enable
@@ -598,32 +625,8 @@ hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
     catch
     endtry
 "}}}
-" mini plugins "{{{
-" Copying/pasting text to the system clipboard."{{{
-"
-" For some reason Vim no longer wants to talk to the OS X pasteboard rough "*.
-" Computers are bullshit.
-function! g:FuckingCopyTheTextPlease()
-    let view = winsaveview()
-    let old_z = @z
-    normal! gv"zy
-    call system('pbcopy', @z)
-    let @z = old_z
-    call winrestview(view)
-endfunction
-
-function! g:FuckingCopyAllTheTextPlease()
-    let view = winsaveview()
-    let old_z = @z
-    normal! ggVG"zy
-    call system('pbcopy', @z)
-    let @z = old_z
-    call winrestview(view)
-endfunction
-
-noremap <leader>p "*p
-" noremap <leader>p mz:r!pbpaste<cr>`z
-vnoremap <leader>y :<c-u>call g:FuckingCopyTheTextPlease()<cr>
-nnoremap <leader>y VV:<c-u>call g:FuckingCopyTheTextPlease()<cr>
-nnoremap <leader>Y :<c-u>call g:FuckingCopyAllTheTextPlease()<cr>"}}}
+" Snippet variables"{{{
+  let g:snips_author = 'Bjorn Mulder'
+  let g:snips_email = 'info@bjorn-mulder.com'
+  let g:snips_github = 'http://github.com/BjornMulder'
 "}}}
