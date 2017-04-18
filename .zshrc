@@ -2,7 +2,8 @@
 export ZSH=~/.oh-my-zsh
 
 
-ZSH_THEME="agnoster"
+ZSH_THEME="ys"
+# agnoster
 #af-magic
 # crunch
 # brad-muse
@@ -33,6 +34,7 @@ source $ZSH/oh-my-zsh.sh
 alias zc="v ~/.zshrc"
 alias vc="v ~/.nvimrc"
 alias tc="v ~/.tmux.conf"
+
 alias ic="v ~/.config/i3/config"
 
 alias c="clear"
@@ -61,11 +63,18 @@ alias ctags="`brew --prefix`/bin/ctags"
 
 # mount pi smb share
 alias mountdev="mount -t smbfs //raket@31.149.12.110/devshare ~/code/raket/devserver"
+
+
+
 alias composer="php /usr/local/bin/composer.phar"
 
 # python
 alias p="python"
 alias p3="python3"
+
+
+# quick boilerplating
+alias html5="sh ~/automationScripts/html5boilerplate.sh"
 
 ### linux stuff# {{{
 # alias mntftp="python ~/.scripts/gcurlftpfs.py"
