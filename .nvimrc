@@ -228,9 +228,13 @@ Plug 'cakebaker/scss-syntax.vim'"}}}
 Plug 'jelera/vim-javascript-syntax'
 Plug 'pangloss/vim-javascript'
 Plug 'isRuslan/vim-es6'
+Plug 'sheerun/vim-polyglot'
+Plug 'othree/yajs.vim', { 'for': 'javascript' }
 " better js
 Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
-" Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+Plug 'elzr/vim-json'
+Plug 'itspriddle/vim-jquery'
+Plug 'othree/javascript-libraries-syntax.vim'
 
 "}}}
 "}}}
@@ -284,6 +288,9 @@ Plug 'Quramy/tsuquyomi'
 """ Ionic"{{{
 Plug 'akz92/vim-ionic2'
 "}}}
+""" Latex"{{{
+    Plug 'lervag/vimtex'
+"}}}
 " All of your Plugins must be added before the following line
 call plug#end()
 
@@ -299,7 +306,7 @@ filetype plugin indent on    " required
 
     let g:ctrlp_working_path_mode = 'ra'
 
-    set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/kohana_system/*,*/panoview/*,*/huiswerk/*,*/node_modules/*     " MacOSX/Linux
+    set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/kohana_system/*,*/panoview/*,*/huiswerk/*,*/node_modules/*,*/dist/*     " MacOSX/Linux
     set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
     set wildignore+=*.pyc
     let NERDTreeIgnore = ['\.pyc$']
@@ -359,7 +366,6 @@ filetype plugin indent on    " required
      xmap <C-k>     <Plug>(neosnippet_expand_target)
      let g:neosnippet#snippets_directory='~/dotfiles/snippets/vim'
 
-     Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
      let g:deoplete#enable_at_startup = 1
      if !exists('g:deoplete#omni#input_patterns')
        let g:deoplete#omni#input_patterns = {}
@@ -375,7 +381,8 @@ filetype plugin indent on    " required
        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
        autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-       autocmd  FileType  php setlocal omnifunc=phpcomplete_extended#CompletePHP
+       autocmd FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
+       autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 
      augroup end
      " tern

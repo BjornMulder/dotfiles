@@ -104,6 +104,7 @@ alias html5="sh ~/automationScripts/html5boilerplate.sh"
 # }}}
 
 
+eval $(thefuck --alias)
 #----------------------------------------------------------------
 DISABLE_AUTO_TITLE=true
 
