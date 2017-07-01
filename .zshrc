@@ -2,7 +2,7 @@
 export ZSH=~/.oh-my-zsh
 
 
-ZSH_THEME="ys"
+ZSH_THEME="nanotech"
 # agnoster
 #af-magic
 # crunch
@@ -18,6 +18,7 @@ plugins=(
 	git
   zsh-autosuggestions
   sudo
+  brew
 	)
 
 # User configuration
@@ -75,6 +76,15 @@ alias p3="python3"
 
 # quick boilerplating
 alias html5="sh ~/automationScripts/html5boilerplate.sh"
+
+# Time warrior
+alias tw="timew"
+alias tws="timew start"
+alias tww="timew week"
+alias twd="timew day"
+alias twsum="timew summary"
+alias twsid="timew summary :ids"
+
 
 ### linux stuff# {{{
 # alias mntftp="python ~/.scripts/gcurlftpfs.py"
