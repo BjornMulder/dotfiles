@@ -31,11 +31,15 @@ inoremap <down> <NOP>
 " switch ; and :
 nnoremap ; :
 nnoremap : ;
+
 "map leader to space
 let mapleader = "\<space>"
 
 " reload window on focus lost
 :au FocusLost * :wa
+
+" Fonts
+set encoding=utf8
 
 " map local leader to comma
 let maplocalleader = ","
@@ -47,7 +51,7 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/vendor/*,*/\.git/*,*/kohana_system/*
 
 " set filetype to html + php for php files
 autocmd BufRead,BufNewFile *.php setlocal filetype=php
-autocmd BufRead,BufNewFile *.ctp setlocal filetype=php.html
+autocmd BufRead,BufNewFile *.ctp setlocal filetype=php
 autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
 autocmd BufRead,BufNewFile *.njk setlocal filetype=jinja.html
 
@@ -63,9 +67,10 @@ autocmd! bufwritepost .nvimrc source %
 
 " use system clipboard
 set clipboard=unnamed
+
 " make vim save more
 set hidden
-set history=100
+set history=1000
 
 " show whitespace
 set list
@@ -116,6 +121,10 @@ set softtabstop=2
 set shiftwidth=2
 set expandtab
 set autoindent
+
+autocmd Filetype javascript setlocal ts=4 sw=4 sts=0 expandtab
+autocmd Filetype php setlocal ts=4 sw=4 sts=0 expandtab
+autocmd Filetype php.html setlocal ts=4 sw=4 sts=0 expandtab
 
 " More tabs for python
 au BufNewFile,BufRead *.py
@@ -184,6 +193,9 @@ set foldtext=MyFoldText()"}}}
 " including all plugins"{{{
 call plug#begin('~/.vim/plugged')
 "plugin calls
+""" Icons"{{{
+Plug 'ryanoasis/vim-devicons'
+"}}}
 """ easy comments with gcc"{{{
 Plug 'tpope/vim-commentary'"}}}
 """ well... emmet"{{{
@@ -229,11 +241,8 @@ Plug 'alvan/vim-closetag'"}}}
 """ sass"{{{
 Plug 'cakebaker/scss-syntax.vim'"}}}
 """ javascript"{{{
-Plug 'jelera/vim-javascript-syntax'
-Plug 'pangloss/vim-javascript'
 Plug 'isRuslan/vim-es6'
-Plug 'sheerun/vim-polyglot'
-Plug 'othree/yajs.vim', { 'for': 'javascript' }
+Plug 'walm/jshint.vim'
 " better js
 Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
 Plug 'elzr/vim-json'
@@ -241,35 +250,36 @@ Plug 'itspriddle/vim-jquery'
 Plug 'othree/javascript-libraries-syntax.vim'
 
 "}}}
+""" Php "{{{
+Plug 'vim-scripts/phpcs.vim'
+Plug 'jwalton512/vim-blade'
+
+Plug 'shawncplus/phpcomplete.vim'
+" Plug 'spf13/PIV'
 "}}}
-""" autocompletion "{{{
-Plug 'ervandew/supertab'
-Plug 'Shougo/neosnippet'
-Plug 'Shougo/neosnippet-snippets'
-Plug 'Shougo/deoplete.nvim'    "}}}
 """ markdown"{{{
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'suan/vim-instant-markdown'
 Plug 'JamshedVesuna/vim-markdown-preview'"}}}
+""" mysql "{{{
+Plug 'vim-scripts/SQLComplete.vim'
+"}}}
+"}}}
+""" Snippets"{{{
+" Track the engine.
+Plug 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets'
+"}}}
 """ VimWiki"{{{
 Plug 'vimwiki/vimwiki'"}}}
-""" command-T"{{{
+""" ctrlp"{{{
 Plug 'ctrlpvim/ctrlp.vim'
 "}}}
 """ Beautifull indentation "{{{
 Plug 'Yggdroot/indentLine'
-"}}}
-""" phpcomplete "{{{
-Plug 'shawncplus/phpcomplete.vim'
-Plug 'Shougo/vimproc'
-Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
-Plug 'zchee/deoplete-jedi'
-"}}}
-""" jinja "{{{
-Plug 'lepture/vim-jinja'"}}}
-""" mysql "{{{
-Plug 'vim-scripts/SQLComplete.vim'
 "}}}
 """ Vdebug "{{{
 Plug 'joonty/vdebug'
@@ -281,21 +291,17 @@ Plug 'NLKNguyen/pipe-mysql.vim'
 """ easymotion "{{{
 Plug 'easymotion/vim-easymotion'
 "}}}
-""" ultisnips"{{{
-" Track the engine.
-Plug 'SirVer/ultisnips'
-" Snippets are separated from the engine. Add this if you want them:
-Plug 'honza/vim-snippets'
+"""" you completeme"{{{
+Plug 'Valloric/YouCompleteMe'
+""}}}
+""" Grammar checking"{{{
+Plug 'rhysd/vim-grammarous'
 "}}}
 """ TypeScript"{{{
 Plug 'leafgarland/typescript-vim'
-Plug 'Quramy/tsuquyomi'
 "}}}
-""" Ionic"{{{
-Plug 'akz92/vim-ionic2'
-"}}}
-""" Latex"{{{
-Plug 'lervag/vimtex'
+""" SuperTab"{{{
+Plug 'ervandew/supertab'
 "}}}
 " All of your Plugins must be added before the following line
 call plug#end()
@@ -320,7 +326,7 @@ let NERDTreeIgnore = ['\.pyc$']
 let g:ctrlp_follow_symlinks=0
 let g:ctrlp_clear_cache_on_exit=0
 
-let g:ctrlp_root_markers = ['robots.txt']
+let g:ctrlp_root_markers = ['robots.txt', 'package.json']
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_custom_ignore = {
       \ 'dir':  '\v[\/]\.(git|hg|svn|kohana_system|kohana_modules|huiswerk|panoview|node_modules)$',
@@ -340,6 +346,7 @@ let g:closetag_filenames = "*.html,*.xhtml,*.phtml""}}}
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline_powerline_fonts = 1
 "molokai
 let g:airline_theme='solarized'
 "}}}
@@ -356,55 +363,76 @@ let g:vimwiki_list = [{'syntax': 'markdown', 'ext': '.md'}]"}}}
 " indentline "{{{
 let g:indentLine_char = '¦'
 "}}}
-" superTab "{{{
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" easymotion {{{
+" Move to line
+map <Leader>el <Plug>(easymotion-bd-jk)
+nmap <Leader>el <Plug>(easymotion-overwin-line)
 
+" Move to word
+map  <Leader>ew <Plug>(easymotion-bd-w)
+nmap <Leader>ew <Plug>(easymotion-overwin-w)
+"}}}
+" superTab "{{{
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 "
 " "}}}
-" deoplete"{{{
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-let g:neosnippet#snippets_directory='~/dotfiles/snippets/vim'
+" neocommplete"{{{
+" Use neocomplete.
+let g:tern_request_timeout = 1
+let g:tern_show_signature_in_pum = '0'  " This do disable full signature type on autocomplete
+" Use tern_for_vim.
+let g:tern#command = ["tern"]
+let g:tern#arguments = ["--persistent"]
+"Add extra filetypes
+let g:tern#filetypes = [
+                \ 'jsx',
+                \ 'javascript.jsx',
+                \ 'vue',
+                \ ]
 
-let g:deoplete#enable_at_startup = 1
-if !exists('g:deoplete#omni#input_patterns')
-  let g:deoplete#omni#input_patterns = {}
+let g:tern#is_show_argument_hints_enabled = 1
+" For conceal markers.
+function! g:UltiSnips_Complete()
+    call UltiSnips#ExpandSnippet()
+    if g:ulti_expand_res == 0
+        if pumvisible()
+            return "\<C-n>"
+        else
+            call UltiSnips#JumpForwards()
+            if g:ulti_jump_forwards_res == 0
+               return "\<TAB>"
+            endif
+        endif
+    endif
+    return ""
+endfunction
+
+au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-e>"
+" this mapping Enter key to <C-y> to chose the current highlight item 
+" and close the selection list, same as other IDEs.
+" CONFLICT with some plugins like tpope/Endwise
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
 endif
-" let g:deoplete#disable_auto_complete = 1
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
-" omnifuncs
-augroup omnifuncs
-  autocmd!
-  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-augroup end
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+" autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
 
-au FileType php set omnifunc=phpcomplete#CompletePHP
-let php_sql_query=1
-let php_htmlInStrings=1
-" tern
-if exists('g:plugs["tern_for_vim"]')
-  let g:tern_show_argument_hints = 'on_hold'
-  let g:tern_show_signature_in_pum = 1
-  autocmd FileType javascript setlocal omnifunc=tern#Complete
-endif
-let g:deoplete#omni_patterns = {}
-" tern
-autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
-let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
-""}}}
+
+"""}}}
+" Instant markdown{{{
+let g:instant_markdown_autostart = 0
 "}}}
+""}}}
 " styling"{{{
 syntax enable
 set background=dark
@@ -431,6 +459,10 @@ nnoremap <leader>k <C-W><C-K>
 nnoremap <leader>l <C-W><C-L>
 nnoremap <leader>h <C-W><C-H>
 
+nnoremap <leader>td :TernDef<CR>
+nnoremap <leader>tc :TernDoc<CR>
+nnoremap <leader>tty :TernType<CR>
+nnoremap <leader>tr :TernRefs<CR>
 
 " Nerdtree shortcut
 nnoremap <leader>tt :NERDTreeToggle<CR>
@@ -454,25 +486,23 @@ nnoremap <leader>snp :set nopaste<CR>
 nnoremap <leader>ff za
 
 
-" Write shortcut (don's really use it though)
-nnoremap <Leader>w :w<CR>
-
 " CommandT
 nnoremap <leader>o :CtrlP<CR>
+
 " Reload ~/.vimrc
 nnoremap <leader>r :source ~/.nvimrc<CR>
 
 " Magit shortcut
 nnoremap <leader>g :Magit<CR>
 
-" Emmet shortcut
-nnoremap <leader>e <C-Y>,
-
 " Open current file in Sublime
-nnoremap <leader>so :!sublime %<CR>
+nnoremap <leader>so :!sublime %:p<CR>
+
 
 "convert whole file to tabs
 nnoremap <leader>ctt :set ts=2 <CR> :set et <CR> :%retab! <CR>
+
+nnoremap <leader><leader>r :%s/\<<C-r>=expand("<cword>")<CR>\>/
 
 "}}}
 " remapping"{{{
@@ -525,6 +555,11 @@ nnoremap <m-left> :vertical resize -3<cr>
 nnoremap <m-up> :resize +3<cr>
 nnoremap <m-down> :resize -3<cr>
 " }}}
+"}}}
+" FileType specific config{{{
+  " Php{{{
+  let g:syntastic_php_checkers=['php', '/usr/local/bin']
+  "}}}
 "}}}
 " change cursor depending on mode"{{{
 " Use a blinking upright bar cursor in Insert mode, a blinking block in normal
@@ -644,3 +679,10 @@ let g:snips_author = 'Bjorn Mulder'
 let g:snips_email = 'info@bjorn-mulder.com'
 let g:snips_github = 'http://github.com/BjornMulder'
 "}}}
+" Autocommands {{{
+" autoclose nerdTree if last window
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+"auto open nerdtree and switch to main buffer
+autocmd VimEnter * NERDTree
+
+autocmd VimEnter * wincmd p"}}}

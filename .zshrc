@@ -2,7 +2,7 @@
 export ZSH=~/.oh-my-zsh
 
 
-ZSH_THEME="nanotech"
+ZSH_THEME="agnoster"
 # agnoster
 #af-magic
 # crunch
@@ -23,6 +23,7 @@ plugins=(
 
 # User configuration
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/home/bjorn/tmp"
+export PATH="/Applications/Android\ Studio.app/sdk/tools:$PATH"
 export PATH="$PATH:$HOME/.composer/vendor/bin:$HOME"
 export MANPATH="/usr/local/man:$MANPATH"
 export EDITOR='nvim'
@@ -63,7 +64,7 @@ alias v="nvim"
 alias ctags="`brew --prefix`/bin/ctags"
 
 # mount pi smb share
-alias mountdev="mount -t smbfs //raket@31.149.12.110/devshare ~/code/raket/devserver"
+alias mountdev="mount -t smbfs //raket@31.149.12.110/devshare ~/Desktop/mount"
 
 
 
@@ -85,6 +86,8 @@ alias twd="timew day"
 alias twsum="timew summary"
 alias twsid="timew summary :ids"
 
+# Artisan
+alias pamm="php artisan module:migrate"
 
 ### linux stuff# {{{
 # alias mntftp="python ~/.scripts/gcurlftpfs.py"
