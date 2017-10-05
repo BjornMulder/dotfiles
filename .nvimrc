@@ -303,6 +303,11 @@ Plug 'leafgarland/typescript-vim'
 """ SuperTab"{{{
 Plug 'ervandew/supertab'
 "}}}
+"
+"
+Plug 'OmniSharp/omnisharp-vim'
+Plug 'tpope/vim-dispatch'
+Plug 'OrangeT/vim-csharp'
 " All of your Plugins must be added before the following line
 call plug#end()
 
@@ -497,6 +502,8 @@ nnoremap <leader>g :Magit<CR>
 
 " Open current file in Sublime
 nnoremap <leader>so :!sublime %:p<CR>
+nnoremap <leader>cpi :!cordova prepare ios<CR>
+nnoremap <leader>cpa :!cordova prepare android<CR>
 
 
 "convert whole file to tabs
@@ -676,13 +683,6 @@ endtry
 "}}}
 " Snippet variables"{{{
 let g:snips_author = 'Bjorn Mulder'
-let g:snips_email = 'info@bjorn-mulder.com'
+let g:snips_email = 'hello@bjorn-mulder.com'
 let g:snips_github = 'http://github.com/BjornMulder'
 "}}}
-" Autocommands {{{
-" autoclose nerdTree if last window
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-"auto open nerdtree and switch to main buffer
-autocmd VimEnter * NERDTree
-
-autocmd VimEnter * wincmd p"}}}

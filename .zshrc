@@ -23,7 +23,8 @@ plugins=(
 
 # User configuration
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/home/bjorn/tmp"
-export PATH="/Applications/Android\ Studio.app/sdk/tools:$PATH"
+export PATH="/Volumes/T3/apps/Android\ Studio.app/sdk/tools:$PATH"
+export PATH="/Users/bjornmulder/Library/Android/sdk/tools:$PATH and export PATH=/Users/bjornmulder/Library/Android/sdk/platform-tools:$PATH"
 export PATH="$PATH:$HOME/.composer/vendor/bin:$HOME"
 export MANPATH="/usr/local/man:$MANPATH"
 export EDITOR='nvim'
@@ -66,8 +67,6 @@ alias ctags="`brew --prefix`/bin/ctags"
 # mount pi smb share
 alias mountdev="mount -t smbfs //raket@31.149.12.110/devshare ~/Desktop/mount"
 
-
-
 alias composer="php /usr/local/bin/composer.phar"
 
 # python
@@ -78,16 +77,9 @@ alias p3="python3"
 # quick boilerplating
 alias html5="sh ~/automationScripts/html5boilerplate.sh"
 
-# Time warrior
-alias tw="timew"
-alias tws="timew start"
-alias tww="timew week"
-alias twd="timew day"
-alias twsum="timew summary"
-alias twsid="timew summary :ids"
-
 # Artisan
-alias pamm="php artisan module:migrate"
+alias pa="php artisan"
+alias pas="php artisan serve"
 
 ### linux stuff# {{{
 # alias mntftp="python ~/.scripts/gcurlftpfs.py"
@@ -141,3 +133,7 @@ export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 eval $(/usr/libexec/path_helper -s)
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/bjornmulder/.sdkman"
+[[ -s "/Users/bjornmulder/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/bjornmulder/.sdkman/bin/sdkman-init.sh"
