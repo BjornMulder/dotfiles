@@ -509,7 +509,6 @@ nnoremap <leader>cpa :!cordova prepare android<CR>
 "convert whole file to tabs
 nnoremap <leader>ctt :set ts=2 <CR> :set et <CR> :%retab! <CR>
 
-nnoremap <leader><leader>r :%s/\<<C-r>=expand("<cword>")<CR>\>/
 
 "}}}
 " remapping"{{{
