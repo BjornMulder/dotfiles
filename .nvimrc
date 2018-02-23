@@ -490,7 +490,6 @@ nnoremap <leader>snp :set nopaste<CR>
 " Fold toggle
 nnoremap <leader>ff za
 
-
 " CommandT
 nnoremap <leader>o :CtrlP<CR>
 
@@ -502,6 +501,8 @@ nnoremap <leader>g :Magit<CR>
 
 " Open current file in Sublime
 nnoremap <leader>so :!sublime %:p<CR>
+
+" Cordova shortcuts
 nnoremap <leader>cpi :!cordova prepare ios<CR>
 nnoremap <leader>cpa :!cordova prepare android<CR>
 

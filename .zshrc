@@ -48,8 +48,6 @@ alias gs="git status"
 alias gcm="git commit -m \" "
 alias ip="curl ipinfo.io/ip"
 
-alias g="z"
-
 # tmux
 alias t="tmux"
 alias tls="tmux ls"
@@ -68,14 +66,6 @@ alias ctags="`brew --prefix`/bin/ctags"
 alias mountdev="mount -t smbfs //raket@31.149.12.110/devshare ~/Desktop/mount"
 
 alias composer="php /usr/local/bin/composer.phar"
-
-# python
-alias p="python"
-alias p3="python3"
-
-
-# quick boilerplating
-alias html5="sh ~/automationScripts/html5boilerplate.sh"
 
 # Artisan
 alias pa="php artisan"
