@@ -161,6 +161,9 @@ set ttimeoutlen=50
 set complete-=.,w,b,y,t
 set completeopt=longest,menuone,preview
 
+" note that must keep noinsert in completeopt, the others is optional
+"set completeopt=noinsert,menuone,noselect
+
 
 set wrap
 
@@ -193,6 +196,32 @@ set foldtext=MyFoldText()"}}}
 " including all plugins"{{{
 call plug#begin('~/.vim/plugged')
 "plugin calls
+""" Autocompletion "{{{
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
+let g:deoplete#ignore_sources.php = ['omni']
+
+
+"}}}
+""" Custom plugins"{{{
+Plug 'bjornmulder/vim-highlight'
+Plug 'bjornmulder/vim-textobjects'
+"}}}
+""" Ctags "{{{
+
+Plug 'craigemery/vim-autotag'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'Shougo/unite.vim'
+Plug 'rstacruz/vim-fastunite'
+
+Plug 'Shougo/neomru.vim'
+Plug 'Shougo/unite-outline'
+Plug 'tsukkee/unite-tag'
+"}}}
+""" Editorconfig "{{{
+Plug 'editorconfig/editorconfig-vim'
+"}}}
 """ Icons"{{{
 Plug 'ryanoasis/vim-devicons'
 "}}}
@@ -201,7 +230,9 @@ Plug 'tpope/vim-commentary'"}}}
 """ well... emmet"{{{
 Plug 'mattn/emmet-vim'"}}}
 """ syntax checker"{{{
-Plug 'scrooloose/syntastic'"}}}
+Plug 'scrooloose/syntastic'
+Plug 'beanworks/vim-phpfmt'
+"}}}
 """ brackets & tags"{{{
 " auto {}[]''() etc
 Plug 'jiangmiao/auto-pairs'
@@ -231,7 +262,7 @@ Plug 'tpope/vim-fugitive'
 " git markings in the gutter
 Plug 'airblade/vim-gitgutter'
 "}}}
-""" filetype plugins"{{{
+""" Filetype plugins"{{{
 """ html"{{{
 Plug 'othree/html5.vim'
 " autocomp <html></html> tags
@@ -250,12 +281,22 @@ Plug 'itspriddle/vim-jquery'
 Plug 'othree/javascript-libraries-syntax.vim'
 
 "}}}
-""" Php "{{{
-Plug 'vim-scripts/phpcs.vim'
+""" PHP "{{{
 Plug 'jwalton512/vim-blade'
+Plug 'stephpy/vim-php-cs-fixer'
 
-Plug 'shawncplus/phpcomplete.vim'
-" Plug 'spf13/PIV'
+" requires phpactor
+Plug 'phpactor/phpactor' ,  {'do': 'composer install'}
+
+Plug 'roxma/ncm-phpactor'
+
+Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'tobyS/pdv'
+Plug 'tobyS/vmustache'
+
+Plug 'bjornmulder/vim-test'
+
+Plug 'ZzAntares/vim-laravel'
 "}}}
 """ markdown"{{{
 Plug 'godlygeek/tabular'
@@ -291,9 +332,6 @@ Plug 'NLKNguyen/pipe-mysql.vim'
 """ easymotion "{{{
 Plug 'easymotion/vim-easymotion'
 "}}}
-"""" you completeme"{{{
-Plug 'Valloric/YouCompleteMe'
-""}}}
 """ Grammar checking"{{{
 Plug 'rhysd/vim-grammarous'
 "}}}
@@ -303,17 +341,16 @@ Plug 'leafgarland/typescript-vim'
 """ SuperTab"{{{
 Plug 'ervandew/supertab'
 "}}}
-"
-"
-Plug 'OmniSharp/omnisharp-vim'
-Plug 'tpope/vim-dispatch'
-Plug 'OrangeT/vim-csharp'
 " All of your Plugins must be added before the following line
 call plug#end()
 
 filetype plugin indent on    " required
 "}}}
 " Plugin Config"{{{
+" ncm2{{{
+" Use <TAB> to select the popup menu:
+"inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+"inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"}}}
 "gitgutter config"{{{
 set updatetime=250
 let g:gitgutter_realtime = 1"}}}
@@ -382,62 +419,12 @@ nmap <Leader>ew <Plug>(easymotion-overwin-w)
 let g:UltiSnipsEditSplit="vertical"
 "
 " "}}}
-" neocommplete"{{{
-" Use neocomplete.
-let g:tern_request_timeout = 1
-let g:tern_show_signature_in_pum = '0'  " This do disable full signature type on autocomplete
-" Use tern_for_vim.
-let g:tern#command = ["tern"]
-let g:tern#arguments = ["--persistent"]
-"Add extra filetypes
-let g:tern#filetypes = [
-                \ 'jsx',
-                \ 'javascript.jsx',
-                \ 'vue',
-                \ ]
-
-let g:tern#is_show_argument_hints_enabled = 1
-" For conceal markers.
-function! g:UltiSnips_Complete()
-    call UltiSnips#ExpandSnippet()
-    if g:ulti_expand_res == 0
-        if pumvisible()
-            return "\<C-n>"
-        else
-            call UltiSnips#JumpForwards()
-            if g:ulti_jump_forwards_res == 0
-               return "\<TAB>"
-            endif
-        endif
-    endif
-    return ""
-endfunction
-
-au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsListSnippets="<c-e>"
-" this mapping Enter key to <C-y> to chose the current highlight item 
-" and close the selection list, same as other IDEs.
-" CONFLICT with some plugins like tpope/Endwise
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-" autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
-
-
-"""}}}
 " Instant markdown{{{
 let g:instant_markdown_autostart = 0
 "}}}
-""}}}
+" PHP-fmt{{{
+let g:phpfmt_standard = '/.DIJ.xml'
+"}}}
 " styling"{{{
 syntax enable
 set background=dark
@@ -554,6 +541,8 @@ nnoremap <leader>cw mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 nnoremap <C-k> :m .-2<CR>==
 nnoremap <C-j> :m .+1<CR>==
 
+map <C-p> [unite]p
+
 " Window Resizing {{{
 " right/up : bigger
 " left/down : smaller
@@ -566,6 +555,9 @@ nnoremap <m-down> :resize -3<cr>
 " FileType specific config{{{
   " Php{{{
   let g:syntastic_php_checkers=['php', '/usr/local/bin']
+  autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
+  autocmd FileType php nnoremap  <leader>pd <ESC>:call pdv#DocumentCurrentLine()<CR>
+  let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
   "}}}
 "}}}
 " change cursor depending on mode"{{{
@@ -594,85 +586,6 @@ augroup line_return
 augroup END
 
 " }}}
-" text objects"{{{
-" Motions for "next/last object". For example, "din()" deletes contents of
-" next ()
-onoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
-xnoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
-onoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
-xnoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
-
-onoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
-xnoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
-onoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
-xnoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
-function! s:NextTextObject(motion, dir)
-  let c = nr2char(getchar())
-
-  if c ==# "b"
-    let c = "("
-  elseif c ==# "B"
-    let c = "{"
-  elseif c ==# "d"
-    let c = "["
-  endif
-
-  exe "normal! ".a:dir.c."v".a:motion.c
-endfunction
-"}}}
-" Highlight Word {{{
-"
-" This mini-plugin provides a few mappings for highlighting words temporarily.
-"
-" Sometimes you're looking at a hairy piece of code and would like a certain
-" word or two to stand out temporarily.  You can search for it, but that only
-" gives you one color of highlighting.  Now you can use <leader>N where N is
-" a number from 1-6 to highlight the current word in a specific color.
-
-function! HiInterestingWord(n) " {{{
-  " Save our location.
-  normal! mz
-
-  " Yank the current word into the z register.
-  normal! "zyiw
-
-  " Calculate an arbitrary match ID.  Hopefully nothing else is using it.
-  let mid = 86750 + a:n
-
-  " Clear existing matches, but don't worry if they don't exist.
-  silent! call matchdelete(mid)
-
-  " Construct a literal pattern that has to match at boundaries.
-  let pat = '\V\<' . escape(@z, '\') . '\>'
-
-  " Actually match the words.
-  call matchadd("InterestingWord" . a:n, pat, 1, mid)
-
-  " Move back to our original location.
-  normal! `z
-endfunction " }}}
-
-" Mappings {{{
-
-nnoremap <silent> <leader>1 :call HiInterestingWord(1)<cr>
-nnoremap <silent> <leader>2 :call HiInterestingWord(2)<cr>
-nnoremap <silent> <leader>3 :call HiInterestingWord(3)<cr>
-nnoremap <silent> <leader>4 :call HiInterestingWord(4)<cr>
-nnoremap <silent> <leader>5 :call HiInterestingWord(5)<cr>
-nnoremap <silent> <leader>6 :call HiInterestingWord(6)<cr>
-
-" }}}
-" Default Highlights {{{
-
-hi def InterestingWord1 guifg=#000000 ctermfg=16 guibg=#ffa724 ctermbg=214
-hi def InterestingWord2 guifg=#000000 ctermfg=16 guibg=#aeee00 ctermbg=154
-hi def InterestingWord3 guifg=#000000 ctermfg=16 guibg=#8cffba ctermbg=121
-hi def InterestingWord4 guifg=#000000 ctermfg=16 guibg=#b88853 ctermbg=137
-hi def InterestingWord5 guifg=#000000 ctermfg=16 guibg=#ff9eb8 ctermbg=211
-hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
-
-" }}}
-
 " }}}
 " Persistent Undo "{{{
 try
