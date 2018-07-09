@@ -296,7 +296,11 @@ Plug 'tobyS/vmustache'
 
 Plug 'bjornmulder/vim-test'
 
-Plug 'ZzAntares/vim-laravel'
+Plug 'noahfrederick/vim-laravel'
+Plug 'noahfrederick/vim-composer'
+
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-projectionist'
 "}}}
 """ markdown"{{{
 Plug 'godlygeek/tabular'
