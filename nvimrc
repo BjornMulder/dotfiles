@@ -1,15 +1,3 @@
-" _______                                              __       __            __        __                     __               __    __  __     __  ______  __       __  _______    ______
-"/       \                                            /  \     /  |          /  |      /  |                   /  |             /  \  /  |/  |   /  |/      |/  \     /  |/       \  /      \
-"$$$$$$$  |    __   ______    ______   _______        $$  \   /$$ | __    __ $$ |  ____$$ |  ______    ______ $$/_______       $$  \ $$ |$$ |   $$ |$$$$$$/ $$  \   /$$ |$$$$$$$  |/$$$$$$  |
-"$$ |__$$ |   /  | /      \  /      \ /       \       $$$  \ /$$$ |/  |  /  |$$ | /    $$ | /      \  /      \$//       |      $$$  \$$ |$$ |   $$ |  $$ |  $$$  \ /$$$ |$$ |__$$ |$$ |  $$/
-"$$    $$<    $$/ /$$$$$$  |/$$$$$$  |$$$$$$$  |      $$$$  /$$$$ |$$ |  $$ |$$ |/$$$$$$$ |/$$$$$$  |/$$$$$$  |/$$$$$$$/       $$$$  $$ |$$  \ /$$/   $$ |  $$$$  /$$$$ |$$    $$< $$ |
-"$$$$$$$  |   /  |$$ |  $$ |$$ |  $$/ $$ |  $$ |      $$ $$ $$/$$ |$$ |  $$ |$$ |$$ |  $$ |$$    $$ |$$ |  $$/ $$      \       $$ $$ $$ | $$  /$$/    $$ |  $$ $$ $$/$$ |$$$$$$$  |$$ |   __
-"$$ |__$$ |   $$ |$$ \__$$ |$$ |      $$ |  $$ |      $$ |$$$/ $$ |$$ \__$$ |$$ |$$ \__$$ |$$$$$$$$/ $$ |       $$$$$$  |      $$ |$$$$ |  $$ $$/    _$$ |_ $$ |$$$/ $$ |$$ |  $$ |$$ \__/  |
-"$$    $$/    $$ |$$    $$/ $$ |      $$ |  $$ |      $$ | $/  $$ |$$    $$/ $$ |$$    $$ |$$       |$$ |      /     $$/       $$ | $$$ |   $$$/    / $$   |$$ | $/  $$ |$$ |  $$ |$$    $$/
-"$$$$$$$/__   $$ | $$$$$$/  $$/       $$/   $$/       $$/      $$/  $$$$$$/  $$/  $$$$$$$/  $$$$$$$/ $$/       $$$$$$$/        $$/   $$/     $/     $$$$$$/ $$/      $$/ $$/   $$/  $$$$$$/
-"       /  \__$$ |
-"       $$    $$/
-"        $$$$$$/
 " Author: Bjorn Mulder
 " Repo: https://github.com/bjornmulder/dotfiles
 
@@ -35,7 +23,7 @@ nnoremap : ;
 "map leader to space
 let mapleader = "\<space>"
 
-" reload window on focus lost
+" save window on focus lost
 :au FocusLost * :wa
 
 " Fonts
@@ -47,7 +35,8 @@ let maplocalleader = ","
 let $PATH=$PATH . ':' . expand('~/.composer/vendor/bin')
 
 "adding some stuff to the wildignore
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/vendor/*,*/\.git/*,*/kohana_system/*
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/vendor/*,*/\.git/*,*/kohana_system/*,
+set wildignore+=*/node_modules/*
 
 " set filetype to html + php for php files
 autocmd BufRead,BufNewFile *.php setlocal filetype=php
@@ -55,6 +44,8 @@ autocmd BufRead,BufNewFile *.ctp setlocal filetype=php
 autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
 autocmd BufRead,BufNewFile *.njk setlocal filetype=jinja.html
 
+" Auto sort php use statements
+let g:php_namespace_sort_after_insert = 1
 
 " disable folding for markdown
 autocmd Filetype markdown setlocal nofoldenable
@@ -68,6 +59,17 @@ autocmd! bufwritepost .nvimrc source %
 " use system clipboard
 set clipboard=unnamed
 
+" ignore dashes in motions
+set isk+=$
+
+" ignore case when searching for only lower case. 
+" but do turn on when using caps
+set ignorecase
+set smartcase
+
+" autoread changed files
+set autoread
+
 " make vim save more
 set hidden
 set history=1000
@@ -75,6 +77,7 @@ set history=1000
 " show whitespace
 set list
 set listchars=tab:>-,trail:~,extends:>,precedes:<
+
 " make backspace behave as it should
 set backspace=indent,eol,start
 
@@ -122,7 +125,6 @@ set shiftwidth=2
 set expandtab
 set autoindent
 
-autocmd Filetype javascript setlocal ts=4 sw=4 sts=0 expandtab
 autocmd Filetype php setlocal ts=4 sw=4 sts=0 expandtab
 autocmd Filetype php.html setlocal ts=4 sw=4 sts=0 expandtab
 
@@ -163,8 +165,6 @@ set completeopt=longest,menuone,preview
 
 " note that must keep noinsert in completeopt, the others is optional
 "set completeopt=noinsert,menuone,noselect
-
-
 set wrap
 
 " make myself behave
@@ -175,6 +175,14 @@ set mouse=a
 
 " Don't update the display while executing macros
 set lazyredraw
+
+" PHP Find Usage
+function! PhpUsage(word)
+    exe 'Ack "::' . a:word . '\(|>' . a:word . '\("'
+endfunction
+
+noremap <Leader>fu :call PhpUsage('<cword>')<CR>
+
 " FoldText"{{{
 function! MyFoldText()
   let line = getline(v:foldstart)
@@ -196,17 +204,120 @@ set foldtext=MyFoldText()"}}}
 " including all plugins"{{{
 call plug#begin('~/.vim/plugged')
 "plugin calls
-""" Autocompletion "{{{
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
-let g:deoplete#ignore_sources.php = ['omni']
-
-
-"}}}
 """ Custom plugins"{{{
 Plug 'bjornmulder/vim-highlight'
 Plug 'bjornmulder/vim-textobjects'
+"}}}
+""" Filetype plugins"{{{
+""" html"{{{
+Plug 'othree/html5.vim'
+" autocomp <html></html> tags
+Plug 'tmhedberg/matchit'
+" close html tags
+Plug 'alvan/vim-closetag'"}}}
+""" sass"{{{
+Plug 'cakebaker/scss-syntax.vim'"}}}
+""" javascript"{{{
+Plug 'isRuslan/vim-es6'
+Plug 'walm/jshint.vim'
+
+" better js
+Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+Plug 'elzr/vim-json'
+Plug 'itspriddle/vim-jquery'
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'pangloss/vim-javascript'
+
+"}}}
+""" PHP "{{{
+Plug 'jwalton512/vim-blade'
+Plug 'stephpy/vim-php-cs-fixer'
+
+Plug 'tobyS/pdv'
+Plug 'tobyS/vmustache'
+
+Plug 'bjornmulder/vim-test'
+
+Plug 'noahfrederick/vim-laravel'
+Plug 'noahfrederick/vim-composer'
+Plug 'alvan/vim-php-manual'
+Plug 'diepm/vim-rest-console'
+
+Plug 'c9s/phpunit.vim'
+let g:autotagTagsFile="tags"
+let g:autotagsCtagsCmd="ctags"
+
+
+let g:php_manual_online_search_shortcut = '<leader>d'
+" PHP Find Usage
+function! PhpUsage(word)
+    exe 'Ack "::' . a:word . '\(|>' . a:word . '\("'
+endfunction
+
+noremap <Leader>fu :call PhpUsage('<cword>')<CR>
+
+" PHP Find Implementations
+function! PhpImplementations(word)
+    exe 'Ack "implements.*' . a:word . ' *($|{)"'
+endfunction
+
+" PHP Find Subclasses
+function! PhpSubclasses(word)
+    exe 'Ack "extends.*' . a:word . ' *($|{)"'
+endfunction
+
+noremap <Leader>fi :call PhpImplementations('<cword>')<CR>
+noremap <Leader>fs :call PhpSubclasses('<cword>')<CR>
+Plug 'mhinz/vim-startify'
+Plug 'adoy/vim-php-refactoring-toolbox'
+
+Plug 'arnaud-lb/vim-php-namespace'
+
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-projectionist'
+Plug 'joonty/vim-phpqa'
+"}}}
+""" markdown"{{{
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'suan/vim-instant-markdown'
+Plug 'JamshedVesuna/vim-markdown-preview'"}}}
+""" mysql "{{{
+Plug 'vim-scripts/SQLComplete.vim'
+"}}}
+"
+"
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+
+" ES2015 code snippets (Optional)
+Plug 'epilande/vim-es2015-snippets'
+
+" React code snippets
+Plug 'epilande/vim-react-snippets'
+
+" Whether to include the types of the completions in the result data. Default: 0
+let g:deoplete#sources#ternjs#types = 1
+" Whether to include documentation strings (if found) in the result data.
+" Default: 0
+let g:deoplete#sources#ternjs#docs = 1
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#enable_smart_case = 1
+
+"Add extra filetypes
+let g:deoplete#sources#ternjs#filetypes = [
+                \ 'jsx',
+                \ 'javascript.jsx',
+                \ 'vue',
+                \ ]
+
+let g:deoplete#enable_at_startup = 1
+Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+"
+"}}}
+""" Hard mode "{{{
+Plug 'wikitopian/hardmode'
 "}}}
 """ Ctags "{{{
 
@@ -214,6 +325,7 @@ Plug 'craigemery/vim-autotag'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'Shougo/unite.vim'
 Plug 'rstacruz/vim-fastunite'
+Plug 'Shougo/denite.nvim'
 
 Plug 'Shougo/neomru.vim'
 Plug 'Shougo/unite-outline'
@@ -251,6 +363,7 @@ Plug 'zhaocai/GoldenView.vim'
 Plug 'jacoborus/tender.vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'sickill/vim-monokai'
+Plug 'evidens/vim-twig'
 """ airline"{{{
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'"}}}"}}}
@@ -261,55 +374,6 @@ Plug 'jreybert/vimagit'
 Plug 'tpope/vim-fugitive'
 " git markings in the gutter
 Plug 'airblade/vim-gitgutter'
-"}}}
-""" Filetype plugins"{{{
-""" html"{{{
-Plug 'othree/html5.vim'
-" autocomp <html></html> tags
-Plug 'tmhedberg/matchit'
-" close html tags
-Plug 'alvan/vim-closetag'"}}}
-""" sass"{{{
-Plug 'cakebaker/scss-syntax.vim'"}}}
-""" javascript"{{{
-Plug 'isRuslan/vim-es6'
-Plug 'walm/jshint.vim'
-" better js
-Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
-Plug 'elzr/vim-json'
-Plug 'itspriddle/vim-jquery'
-Plug 'othree/javascript-libraries-syntax.vim'
-
-"}}}
-""" PHP "{{{
-Plug 'jwalton512/vim-blade'
-Plug 'stephpy/vim-php-cs-fixer'
-
-" requires phpactor
-Plug 'phpactor/phpactor' ,  {'do': 'composer install'}
-
-Plug 'roxma/ncm-phpactor'
-
-Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-Plug 'tobyS/pdv'
-Plug 'tobyS/vmustache'
-
-Plug 'bjornmulder/vim-test'
-
-Plug 'noahfrederick/vim-laravel'
-Plug 'noahfrederick/vim-composer'
-
-Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-projectionist'
-"}}}
-""" markdown"{{{
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
-Plug 'suan/vim-instant-markdown'
-Plug 'JamshedVesuna/vim-markdown-preview'"}}}
-""" mysql "{{{
-Plug 'vim-scripts/SQLComplete.vim'
-"}}}
 "}}}
 """ Snippets"{{{
 " Track the engine.
@@ -345,19 +409,29 @@ Plug 'leafgarland/typescript-vim'
 """ SuperTab"{{{
 Plug 'ervandew/supertab'
 "}}}
+""" Gist "{{{
+Plug 'keith/gist.vim'
+"}}}
+""" ACK "{{{
+Plug 'mileszs/ack.vim'
+"}}}
 " All of your Plugins must be added before the following line
 call plug#end()
 
 filetype plugin indent on    " required
 "}}}
 " Plugin Config"{{{
-" ncm2{{{
-" Use <TAB> to select the popup menu:
-"inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-"inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"}}}
 "gitgutter config"{{{
 set updatetime=250
 let g:gitgutter_realtime = 1"}}}
+" FileType specific config{{{
+  " Php{{{
+  let g:syntastic_php_checkers=['php', '/usr/local/bin']
+  " autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
+  autocmd FileType php nnoremap  <leader>pd <ESC>:call pdv#DocumentCurrentLine()<CR>
+  let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
+  "}}}
+"}}}
 " ctrlP "{{{
 " let g:ctrlp_map = '<c-p>'
 " let g:ctrlp_cmd = 'CtrlP'
@@ -387,14 +461,15 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['jshint']"}}}
 " closetag"{{{
-let g:closetag_filenames = "*.html,*.xhtml,*.phtml""}}}
+" let g:closetag_filenames = "*.html,*.xhtml,*.phtml""}}}
 " airline"{{{
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#left_sep = '-|-'
+let g:airline#extensions#tabline#left_alt_sep = '-|-'
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tagbar#enabled = 0
 "molokai
-let g:airline_theme='solarized'
+let g:airline_theme='molokai'
 "}}}
 " handlebars files highlighting"{{{
 au BufReadPost *.hbs set syntax=html
@@ -418,11 +493,6 @@ nmap <Leader>el <Plug>(easymotion-overwin-line)
 map  <Leader>ew <Plug>(easymotion-bd-w)
 nmap <Leader>ew <Plug>(easymotion-overwin-w)
 "}}}
-" superTab "{{{
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-"
-" "}}}
 " Instant markdown{{{
 let g:instant_markdown_autostart = 0
 "}}}
@@ -448,7 +518,6 @@ hi VertSplit ctermbg=bg ctermfg=bg
 
 "}}}
 " leader commands"{{{
-
 " Better split navigation
 nnoremap <leader>j <C-W><C-J>
 nnoremap <leader>k <C-W><C-K>
@@ -474,15 +543,13 @@ nnoremap <leader>pi :PlugInstall<CR>
 nnoremap <leader>pu :PlugUpdate<CR>
 nnoremap <leader>pc :PlugClean<CR>
 
-" Enable and disable paste
-nnoremap <leader>sp :set paste<CR>
-nnoremap <leader>snp :set nopaste<CR>
-
 " Fold toggle
 nnoremap <leader>ff za
 
 " CommandT
 nnoremap <leader>o :CtrlP<CR>
+nnoremap <leader>to :CtrlPTag<CR>
+nnoremap <leader>bo :Unite buffer -ignorecase<CR>
 
 " Reload ~/.vimrc
 nnoremap <leader>r :source ~/.nvimrc<CR>
@@ -490,31 +557,27 @@ nnoremap <leader>r :source ~/.nvimrc<CR>
 " Magit shortcut
 nnoremap <leader>g :Magit<CR>
 
-" Open current file in Sublime
-nnoremap <leader>so :!sublime %:p<CR>
+" Search
+nnoremap <leader>fe :Ack
 
-" Cordova shortcuts
-nnoremap <leader>cpi :!cordova prepare ios<CR>
-nnoremap <leader>cpa :!cordova prepare android<CR>
+" Denite
+nnoremap <leader>db :Denite buffer<CR>
+nnoremap <leader>dt :Denite tag<CR>
 
 
-"convert whole file to tabs
-nnoremap <leader>ctt :set ts=2 <CR> :set et <CR> :%retab! <CR>
-
+autocmd FileType php nnoremap <Leader>u :call PhpInsertUse()<CR>
 
 "}}}
 " remapping"{{{
 " indend / deindent after selecting the text with (⇧ v), (.) to repeat.
-vnoremap <Tab> >
-vnoremap <S-Tab> <
+nnoremap <Tab> :n<cr>
+nnoremap <S-Tab> :N<cr>
 
 
 " tab config
-nnoremap tl :tabnext<CR>
-nnoremap th :tabprev<CR>
-nnoremap tn :tabnew<CR>
-nnoremap td  :tabclose<CR>
-nnoremap te  :tabedit<Space>
+nnoremap tl :bnext<CR>
+nnoremap th :bprev<CR>
+nnoremap td  :bdelete<CR>
 
 
 " faster moving around a file
@@ -556,14 +619,6 @@ nnoremap <m-up> :resize +3<cr>
 nnoremap <m-down> :resize -3<cr>
 " }}}
 "}}}
-" FileType specific config{{{
-  " Php{{{
-  let g:syntastic_php_checkers=['php', '/usr/local/bin']
-  autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
-  autocmd FileType php nnoremap  <leader>pd <ESC>:call pdv#DocumentCurrentLine()<CR>
-  let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
-  "}}}
-"}}}
 " change cursor depending on mode"{{{
 " Use a blinking upright bar cursor in Insert mode, a blinking block in normal
 if &term == 'xterm-256color' || &term == 'screen-256color'
@@ -590,6 +645,31 @@ augroup line_return
 augroup END
 
 " }}}
+" Php cs {{{
+let g:php_cs_fixer_config_file = '~/.php_cs' " options: --config
+"}}}
+" SuperTab {{{
+let g:SuperTabDefaultCompletionType = "<c-n>"
+"}}}
+" ACK {{{
+" Ack -> Ag
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
+endif
+"}}}
+" PHPQa{{{
+let g:phpqa_messdetector_ruleset = "~/phpmd.xml"
+let g:phpqa_codesniffer_args = "--standard=~/DIJ.xml"
+" Don't run messdetector on save (default = 1)
+let g:phpqa_messdetector_autorun = 0
+
+" Don't run codesniffer on save (default = 1)
+let g:phpqa_codesniffer_autorun = 0
+"}}}
+
+let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
+let g:deoplete#ignore_sources.php = ['omni']
+
 " }}}
 " Persistent Undo "{{{
 try
@@ -603,3 +683,9 @@ let g:snips_author = 'Bjorn Mulder'
 let g:snips_email = 'hello@bjorn-mulder.com'
 let g:snips_github = 'http://github.com/BjornMulder'
 "}}}
+"
+let g:user_emmet_settings = {
+\  'javascript' : {
+\      'extends' : 'jsx',
+\  },
+\}
